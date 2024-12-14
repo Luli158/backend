@@ -57,3 +57,35 @@ app.post("/clientes", (req, res) => {
 app.listen(PUERTO, () => {
     console.log(`Escuchando en el puerto: ${PUERTO}`); 
 })
+
+//4)PUT
+
+app.put("/clientes/:id",(req,res)=>{
+    const{ id } = req.params;
+    const { nombre, apellido } = req.body;
+
+    const clienteIndex = clientes.findIndex(cliente => cliente.id === id);
+    if(clienteIndex !== -1){
+        clientes[clienteIndex].nombre = nombre;
+        clientes[clienteIndex].apellido = apellido;
+
+        console.log(clientes);
+        res.send({status:"success", mensajes: "Cliente actualizado"});
+    } else {
+        res.status(404).send({status:"error", mensaje: "Cliente no encontrado"});
+    }
+})
+
+//5)DELETE
+
+app.delete("/clientes/:id",(req,res)=>{
+    const{ id } = req.params;
+    const clienteIndex = clientes.findIndex(cliente => cliente.id === id);
+    if(clienteIndex !== -1){
+        clientes.splice(clienteIndex, 1);
+        console.log(clientes);
+        res.send({status:"success", mensajes: "Cliente eliminado"});
+    } else {
+        res.status(404).send({status:"error", mensaje: "Cliente no encontrado"});
+    }
+})
